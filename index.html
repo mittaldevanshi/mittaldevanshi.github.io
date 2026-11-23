@@ -115,36 +115,45 @@
     .aside a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); font-weight: 500; }
     .aside a:hover { border-color: var(--accent); }
 
-    /* ── TIMELINE ── */
-    .tl { position: relative; max-width: 900px; margin: 0 auto; padding: 0.5rem 0; }
-    .tl::before {
-      content: ''; position: absolute; left: 50%; transform: translateX(-50%);
-      top: 0; bottom: 0; width: 1px; background: var(--rule);
+    /* ── JOURNEY (map + steps) ── */
+    .journey { display: grid; grid-template-columns: 1.15fr 1fr; gap: 3.5rem; align-items: start; }
+    .journey-map {
+      position: sticky; top: 92px; height: calc(100vh - 140px); max-height: 620px; min-height: 380px;
+      border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; background: #fcfbfa;
     }
-    .tl-item { position: relative; width: 50%; padding: 0 2.8rem 2rem 0; }
-    .tl-item.tl-right { margin-left: 50%; padding: 0 0 2rem 2.8rem; }
-    .tl-item::after {
-      content: ''; position: absolute; right: -5px; top: 1.6rem;
-      width: 9px; height: 9px; border-radius: 50%;
-      background: var(--accent); box-shadow: 0 0 0 4px var(--bg);
+    .journey-map svg { display: block; width: 100%; height: 100%; }
+    .land { fill: #efebe8; stroke: #fcfbfa; stroke-width: 0.6; vector-effect: non-scaling-stroke; }
+    .land.home { fill: #e5ddda; }
+    .route { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 4 5; vector-effect: non-scaling-stroke; transition: opacity 0.6s; }
+    .stop-dot { fill: var(--accent); transition: r 0.4s, opacity 0.4s; }
+    .stop-ring { fill: none; stroke: var(--accent); stroke-width: 1; opacity: 0.35; }
+    .map-caption {
+      position: absolute; left: 1.4rem; top: 1.2rem; pointer-events: none;
+      background: rgba(252,251,250,0.88); padding: 0.4rem 0.6rem 0.5rem; border-radius: 3px;
     }
-    .tl-item.tl-right::after { right: auto; left: -4px; }
-    .tl-card {
-      border: 1px solid var(--rule); border-radius: 4px; padding: 1.4rem 1.5rem;
-      background: var(--bg); transition: border-color 0.25s, transform 0.25s;
+    .map-caption .cap-num { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em; color: var(--faint); }
+    .map-caption .cap-city { font-family: var(--serif); font-size: 1.9rem; line-height: 1.1; }
+    .map-caption .cap-years { font-size: 0.82rem; color: var(--accent); font-weight: 500; }
+    .steps { padding: 18vh 0 22vh; }
+    .step { min-height: 52vh; display: flex; align-items: center; }
+    .step-card {
+      width: 100%; border: 1px solid var(--rule); border-radius: 4px; padding: 1.5rem 1.6rem;
+      background: var(--bg); transition: border-color 0.4s, opacity 0.4s; opacity: 0.45;
     }
-    .tl-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-    .tl-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
-    .tl-date { font-size: 0.78rem; color: var(--faint); font-variant-numeric: tabular-nums; }
-    .tl-logo {
+    .step.active .step-card { border-color: var(--accent); opacity: 1; }
+    .step-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.3rem; }
+    .step-num { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+    .step-logo {
       height: 22px; width: auto; max-width: 110px; object-fit: contain;
-      filter: grayscale(1); opacity: 0.55; transition: filter 0.3s, opacity 0.3s;
+      filter: grayscale(1); opacity: 0.55; transition: filter 0.4s, opacity 0.4s;
     }
-    .tl-card:hover .tl-logo { filter: none; opacity: 1; }
-    .tl-title { font-family: var(--serif); font-size: 1.5rem; line-height: 1.2; }
-    .tl-org { font-size: 0.84rem; font-weight: 500; margin: 0.15rem 0 0.7rem; }
-    .tl-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.8rem; }
-    .tl-location { font-size: 0.76rem; color: var(--accent); font-weight: 500; letter-spacing: 0.02em; }
+    .step.active .step-logo { filter: none; opacity: 1; }
+    .step-city { font-family: var(--serif); font-size: 1.9rem; line-height: 1.15; }
+    .step-years { font-size: 0.8rem; color: var(--accent); font-weight: 500; margin-bottom: 1rem; }
+    .role + .role { margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid var(--rule); }
+    .role-title { font-family: var(--serif); font-size: 1.3rem; line-height: 1.2; }
+    .role-org { font-size: 0.84rem; color: var(--muted); }
+    .role-org span { color: var(--faint); }
 
     /* ── BLOG ── */
     .filters { display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem; margin-bottom: 1.5rem; }
@@ -193,10 +202,12 @@
     @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 700px) {
-      .tl::before { left: 4px; transform: none; }
-      .tl-item, .tl-item.tl-right { width: 100%; margin-left: 0; padding: 0 0 1.5rem 1.8rem; }
-      .tl-item::after, .tl-item.tl-right::after { left: 0; right: auto; }
+    @media (max-width: 900px) {
+      .journey { grid-template-columns: 1fr; gap: 1.5rem; }
+      .journey-map { position: relative; top: 0; height: 340px; min-height: 0; }
+      .steps { padding: 0; }
+      .step { min-height: 0; margin-bottom: 1rem; }
+      .step-card { opacity: 1; }
     }
     @media (max-width: 900px) {
       .nav-links { display: none; }
@@ -289,92 +300,93 @@
       <div class="eyebrow">02 — Experience</div>
       <h2>Places where I made an impact</h2>
     </div>
-    <div class="tl">
-
-      <div class="tl-item tl-right reveal">
-        <div class="tl-card">
-          <div class="tl-top">
-            <div class="tl-date">Feb 2026 – Present</div>
-            <img src="ck-logo.svg" alt="Intuit Credit Karma" class="tl-logo" />
+    <div class="journey">
+      <div class="journey-map" id="journey-map" aria-label="Map of the cities I've lived in">
+        <div class="map-caption"><div class="cap-num" id="cap-num"></div><div class="cap-city" id="cap-city"></div><div class="cap-years" id="cap-years"></div></div>
+      </div>
+      <div class="steps">
+        <div class="step" data-step="0">
+          <div class="step-card">
+            <div class="step-top"><div class="step-num">01 — Surat</div>
+            </div>
+            <div class="step-city">Surat, Gujarat</div>
+            <div class="step-years">Until 2012</div>
+            <div class="role"><div class="role-title">Born and raised</div><div class="role-org">Home</div></div>
           </div>
-          <div class="tl-title">Staff Data Scientist</div>
-          <div class="tl-org">Intuit Credit Karma</div>
-          <div class="tl-location">San Francisco, CA</div>
+        </div>
+        <div class="step" data-step="1">
+          <div class="step-card">
+            <div class="step-top"><div class="step-num">02 — Dehradun</div>
+            </div>
+            <div class="step-city">Dehradun, Uttarakhand</div>
+            <div class="step-years">2012 – 2014</div>
+            <div class="role"><div class="role-title">Left home at 16</div><div class="role-org">Welham Girls' School</div></div>
+          </div>
+        </div>
+        <div class="step" data-step="2">
+          <div class="step-card">
+            <div class="step-top"><div class="step-num">03 — Mumbai</div>
+            <img src="sxc-logo.png" alt="" class="step-logo" />
+            </div>
+            <div class="step-city">Mumbai, Maharashtra</div>
+            <div class="step-years">2014 – 2018</div>
+            <div class="role"><div class="role-title">Bachelor of Science in Statistics</div><div class="role-org">St. Xavier's College · Minor: Economics &amp; Mathematics</div></div>
+          </div>
+        </div>
+        <div class="step" data-step="3">
+          <div class="step-card">
+            <div class="step-top"><div class="step-num">04 — Bloomington</div>
+            <img src="iu-logo.svg" alt="" class="step-logo" />
+            </div>
+            <div class="step-city">Bloomington, IN</div>
+            <div class="step-years">2018 – 2020</div>
+            <div class="role"><div class="role-title">Master of Science in Data Science</div><div class="role-org">Indiana University</div></div>
+            <div class="role"><div class="role-title">Associate Instructor</div><div class="role-org">Indiana University <span>· Aug 2019 – May 2020</span></div></div>
+            <div class="role"><div class="role-title">Data Science Intern</div><div class="role-org">The Bee Corp <span>· Oct 2019 – Dec 2019</span></div></div>
+          </div>
+        </div>
+        <div class="step" data-step="4">
+          <div class="step-card">
+            <div class="step-top"><div class="step-num">05 — Chicago</div>
+            <img src="askwhai-logo.png" alt="" class="step-logo" />
+            </div>
+            <div class="step-city">Chicago, IL</div>
+            <div class="step-years">Summer 2019</div>
+            <div class="role"><div class="role-title">Data Science Intern</div><div class="role-org">Askwhai <span>· May 2019 – Aug 2019</span></div></div>
+          </div>
+        </div>
+        <div class="step" data-step="5">
+          <div class="step-card">
+            <div class="step-top"><div class="step-num">06 — Costa Mesa</div>
+            <img src="experian-logo.png" alt="" class="step-logo" />
+            </div>
+            <div class="step-city">Costa Mesa, CA</div>
+            <div class="step-years">2020 – 2021</div>
+            <div class="role"><div class="role-title">Data Analyst</div><div class="role-org">Experian <span>· June 2020 – Dec 2021</span></div></div>
+          </div>
+        </div>
+        <div class="step" data-step="6">
+          <div class="step-card">
+            <div class="step-top"><div class="step-num">07 — Los Angeles</div>
+            <img src="ck-logo.svg" alt="" class="step-logo" />
+            </div>
+            <div class="step-city">Los Angeles, CA</div>
+            <div class="step-years">2021 – 2026</div>
+            <div class="role"><div class="role-title">Senior Data Scientist</div><div class="role-org">Intuit Credit Karma <span>· Jan 2023 – Jan 2026</span></div></div>
+            <div class="role"><div class="role-title">Data Scientist</div><div class="role-org">Intuit Credit Karma <span>· Dec 2021 – Dec 2022</span></div></div>
+          </div>
+        </div>
+        <div class="step" data-step="7">
+          <div class="step-card">
+            <div class="step-top"><div class="step-num">08 — San Francisco</div>
+            <img src="ck-logo.svg" alt="" class="step-logo" />
+            </div>
+            <div class="step-city">San Francisco, CA</div>
+            <div class="step-years">2026 – Present</div>
+            <div class="role"><div class="role-title">Staff Data Scientist</div><div class="role-org">Intuit Credit Karma <span>· Feb 2026 – Present</span></div></div>
+          </div>
         </div>
       </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-card">
-          <div class="tl-top">
-            <div class="tl-date">Jan 2023 – Jan 2026</div>
-            <img src="ck-logo.svg" alt="Intuit Credit Karma" class="tl-logo" />
-          </div>
-          <div class="tl-title">Senior Data Scientist</div>
-          <div class="tl-org">Intuit Credit Karma</div>
-          <div class="tl-location">Los Angeles, CA</div>
-        </div>
-      </div>
-
-      <div class="tl-item tl-right reveal">
-        <div class="tl-card">
-          <div class="tl-top">
-            <div class="tl-date">Dec 2021 – Dec 2022</div>
-            <img src="ck-logo.svg" alt="Intuit Credit Karma" class="tl-logo" />
-          </div>
-          <div class="tl-title">Data Scientist</div>
-          <div class="tl-org">Intuit Credit Karma</div>
-          <div class="tl-location">Los Angeles, CA</div>
-        </div>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-card">
-          <div class="tl-top">
-            <div class="tl-date">June 2020 – Dec 2021</div>
-            <img src="experian-logo.png" alt="Experian" class="tl-logo" />
-          </div>
-          <div class="tl-title">Data Analyst</div>
-          <div class="tl-org">Experian</div>
-          <div class="tl-location">Costa Mesa, CA</div>
-        </div>
-      </div>
-
-      <div class="tl-item tl-right reveal">
-        <div class="tl-card">
-          <div class="tl-top">
-            <div class="tl-date">Aug 2019 – May 2020</div>
-            <img src="iu-logo.svg" alt="Indiana University" class="tl-logo" />
-          </div>
-          <div class="tl-title">Associate Instructor</div>
-          <div class="tl-org">Indiana University</div>
-          <div class="tl-location">Bloomington, IN</div>
-        </div>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-card">
-          <div class="tl-top">
-            <div class="tl-date">Oct 2019 – Dec 2019</div>
-            <img src="beecorp-logo.webp" alt="The Bee Corp" class="tl-logo" />
-          </div>
-          <div class="tl-title">Data Science Intern</div>
-          <div class="tl-org">The Bee Corp</div>
-          <div class="tl-location">Bloomington, IN</div>
-        </div>
-      </div>
-
-      <div class="tl-item tl-right reveal">
-        <div class="tl-card">
-          <div class="tl-top">
-            <div class="tl-date">May 2019 – Aug 2019</div>
-            <img src="askwhai-logo.png" alt="Askwhai" class="tl-logo" />
-          </div>
-          <div class="tl-title">Data Science Intern</div>
-          <div class="tl-org">Askwhai</div>
-          <div class="tl-location">Chicago, IL</div>
-        </div>
-      </div>
-
     </div>
     <p class="aside">Outside of work — <a href="https://mealswap.lovable.app/" target="_blank">check out my first build, MealSwap ↗</a></p>
   </div>
@@ -562,6 +574,120 @@
     { threshold: 0.08 }
   );
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script>
+(async function () {
+  const STOPS = [
+    { city: 'Surat, Gujarat',        years: 'Until 2012',      c: [72.83, 21.17],   view: 'india' },
+    { city: 'Dehradun, Uttarakhand', years: '2012 – 2014',     c: [78.03, 30.32],   view: 'india' },
+    { city: 'Mumbai, Maharashtra',   years: '2014 – 2018',     c: [72.88, 19.08],   view: 'india' },
+    { city: 'Bloomington, IN',       years: '2018 – 2020',     c: [-86.53, 39.17],  view: 'arc'   },
+    { city: 'Chicago, IL',           years: 'Summer 2019',     c: [-87.63, 41.88],  view: 'us'    },
+    { city: 'Costa Mesa, CA',        years: '2020 – 2021',     c: [-117.92, 33.64], view: 'us'    },
+    { city: 'Los Angeles, CA',       years: '2021 – 2026',     c: [-118.24, 34.05], view: 'us'    },
+    { city: 'San Francisco, CA',     years: '2026 – Present',  c: [-122.42, 37.77], view: 'us'    },
+  ];
+  const VIEWS = { india: [0, 1, 2], arc: [2, 3], us: [3, 4, 5, 7] };
+  const HOME = new Set(['356', '840']);  // India, United States
+
+  const box = document.getElementById('journey-map');
+  if (!box || !window.d3 || !window.topojson) return;
+  let world;
+  try {
+    world = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json');
+  } catch (e) { box.style.display = 'none'; return; }
+  const countries = topojson.feature(world, world.objects.countries).features;
+
+  const mobile = window.matchMedia('(max-width: 900px)');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const svg = d3.select(box).insert('svg', ':first-child');
+  const gWorld = svg.append('g');
+  const gDots = svg.append('g');
+  let W, H, projection, path, pts, active = -1, view = null;
+
+  function draw() {
+    W = box.clientWidth; H = box.clientHeight;
+    svg.attr('viewBox', `0 0 ${W} ${H}`);
+    projection = d3.geoNaturalEarth1().rotate([7, 0]).fitSize([W, H], { type: 'Sphere' });
+    path = d3.geoPath(projection);
+    pts = STOPS.map(s => projection(s.c));
+
+    gWorld.selectAll('*').remove();
+    gWorld.selectAll('path.land').data(countries).join('path')
+      .attr('class', d => 'land' + (HOME.has(d.id) ? ' home' : ''))
+      .attr('d', path);
+    gWorld.selectAll('path.route').data(STOPS.slice(1)).join('path')
+      .attr('class', 'route')
+      .attr('d', (d, i) => path({ type: 'LineString', coordinates: [STOPS[i].c, d.c] }));
+
+    gDots.selectAll('*').remove();
+    gDots.selectAll('circle.stop-ring').data(STOPS).join('circle').attr('class', 'stop-ring').attr('r', 0);
+    gDots.selectAll('circle.stop-dot').data(STOPS).join('circle').attr('class', 'stop-dot');
+  }
+
+  // A view is [cx, cy, width] in base projection pixels.
+  function viewFor(ids) {
+    const xs = ids.map(i => pts[i][0]), ys = ids.map(i => pts[i][1]);
+    const [x0, x1] = d3.extent(xs), [y0, y1] = d3.extent(ys);
+    const w = Math.max((x1 - x0) * 2, (y1 - y0) * 2 * W / H, W / 9);
+    return [(x0 + x1) / 2, (y0 + y1) / 2, w];
+  }
+
+  function apply(v) {
+    const k = W / v[2], tx = W / 2 - k * v[0], ty = H / 2 - k * v[1];
+    gWorld.attr('transform', `translate(${tx},${ty}) scale(${k})`);
+    gDots.selectAll('circle')
+      .attr('cx', d => tx + k * projection(d.c)[0])
+      .attr('cy', d => ty + k * projection(d.c)[1]);
+  }
+
+  function setStep(step, animate) {
+    active = step;
+    const all = step === 'all';
+    const n = all ? STOPS.length - 1 : step;
+    gWorld.selectAll('path.route').style('opacity', (d, i) => (i < n ? 1 : 0));
+    gDots.selectAll('circle.stop-dot')
+      .style('opacity', (d, i) => (i <= n ? 1 : 0))
+      .attr('r', (d, i) => (!all && i === n ? 5.5 : 3.5));
+    gDots.selectAll('circle.stop-ring').attr('r', (d, i) => (!all && i === n ? 13 : 0));
+
+    const s = all ? null : STOPS[step];
+    document.getElementById('cap-num').textContent = all ? 'MY JOURNEY' : `${String(step + 1).padStart(2, '0')} / ${String(STOPS.length).padStart(2, '0')}`;
+    document.getElementById('cap-city').textContent = all ? '8 cities' : s.city;
+    document.getElementById('cap-years').textContent = all ? 'Surat → San Francisco' : s.years;
+
+    const target = viewFor(all ? STOPS.map((d, i) => i) : VIEWS[s.view]);
+    if (!view || !animate || reduced) { view = target; apply(view); return; }
+    const interp = d3.interpolateZoom(view, target);
+    svg.interrupt().transition().duration(Math.min(1600, Math.max(500, interp.duration * 0.7)))
+      .tween('zoom', () => t => { view = interp(t); apply(view); });
+  }
+
+  const steps = document.querySelectorAll('.step');
+  const observer = new IntersectionObserver(entries => {
+    if (mobile.matches) return;
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const i = +e.target.dataset.step;
+      steps.forEach(el => el.classList.toggle('active', el === e.target));
+      if (i !== active) setStep(i, true);
+    });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  steps.forEach(el => observer.observe(el));
+
+  function reset() {
+    draw();
+    view = null;
+    if (mobile.matches) { steps.forEach(el => el.classList.add('active')); setStep('all', false); }
+    else { steps.forEach((el, i) => el.classList.toggle('active', i === Math.max(active, 0))); setStep(typeof active === 'number' && active >= 0 ? active : 0, false); }
+  }
+  reset();
+  let t;
+  window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(reset, 150); });
+})();
 </script>
 
 </body>
