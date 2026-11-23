@@ -15,8 +15,8 @@
       --muted:   #6b6670;
       --faint:   #9a959f;
       --rule:    #ebe8ee;
-      --accent:  #5b3f8c;
-      --accent-soft: #f4f0f9;
+      --accent:  #7b1e2e;
+      --accent-soft: #f7ecee;
       --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
       --sans:  'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
     }
@@ -115,6 +115,37 @@
     .aside a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); font-weight: 500; }
     .aside a:hover { border-color: var(--accent); }
 
+    /* ── TIMELINE ── */
+    .tl { position: relative; max-width: 900px; margin: 0 auto; padding: 0.5rem 0; }
+    .tl::before {
+      content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+      top: 0; bottom: 0; width: 1px; background: var(--rule);
+    }
+    .tl-item { position: relative; width: 50%; padding: 0 2.8rem 2rem 0; }
+    .tl-item.tl-right { margin-left: 50%; padding: 0 0 2rem 2.8rem; }
+    .tl-item::after {
+      content: ''; position: absolute; right: -5px; top: 1.6rem;
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 0 4px var(--bg);
+    }
+    .tl-item.tl-right::after { right: auto; left: -4px; }
+    .tl-card {
+      border: 1px solid var(--rule); border-radius: 4px; padding: 1.4rem 1.5rem;
+      background: var(--bg); transition: border-color 0.25s, transform 0.25s;
+    }
+    .tl-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .tl-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
+    .tl-date { font-size: 0.78rem; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .tl-logo {
+      height: 22px; width: auto; max-width: 110px; object-fit: contain;
+      filter: grayscale(1); opacity: 0.55; transition: filter 0.3s, opacity 0.3s;
+    }
+    .tl-card:hover .tl-logo { filter: none; opacity: 1; }
+    .tl-title { font-family: var(--serif); font-size: 1.5rem; line-height: 1.2; }
+    .tl-org { font-size: 0.84rem; font-weight: 500; margin: 0.15rem 0 0.7rem; }
+    .tl-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.8rem; }
+    .tl-location { font-size: 0.76rem; color: var(--accent); font-weight: 500; letter-spacing: 0.02em; }
+
     /* ── BLOG ── */
     .filters { display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem; margin-bottom: 1.5rem; }
     .filter-btn {
@@ -124,19 +155,24 @@
     }
     .filter-btn:hover { color: var(--text); }
     .filter-btn.active { color: var(--text); border-color: var(--text); }
-    .posts { border-top: 1px solid var(--text); }
+    .posts { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.5rem; }
     .post {
-      display: grid; grid-template-columns: 220px 1fr auto; gap: 2rem; align-items: baseline;
-      padding: 1.6rem 0; border-bottom: 1px solid var(--rule);
-      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column; text-decoration: none; color: inherit;
+      border: 1px solid var(--rule); border-radius: 4px; background: var(--bg);
+      transition: border-color 0.25s, transform 0.25s;
     }
+    .post:hover { border-color: var(--accent); transform: translateY(-3px); }
     .post.hidden { display: none; }
-    .post-date { font-size: 0.82rem; color: var(--faint); font-variant-numeric: tabular-nums; }
-    .post-title { font-family: var(--serif); font-size: 1.45rem; line-height: 1.25; margin-bottom: 0.3rem; transition: color 0.2s; }
-    .post-excerpt { font-size: 0.9rem; color: var(--muted); max-width: 600px; }
-    .post-arrow { font-size: 1rem; color: var(--faint); transition: transform 0.2s, color 0.2s; }
+    .post-body { padding: 1.5rem 1.5rem 1.2rem; flex: 1; }
+    .post-title { font-family: var(--serif); font-size: 1.4rem; line-height: 1.2; margin-bottom: 0.6rem; transition: color 0.2s; }
     .post:hover .post-title { color: var(--accent); }
-    .post:hover .post-arrow { color: var(--accent); transform: translateX(4px); }
+    .post-excerpt { font-size: 0.87rem; color: var(--muted); }
+    .post-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.9rem 1.5rem; border-top: 1px solid var(--rule);
+      font-size: 0.78rem; color: var(--faint); font-variant-numeric: tabular-nums;
+    }
+    .read-more { font-weight: 500; color: var(--accent); }
     .more-links { display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; margin-top: 2.5rem; font-size: 0.9rem; }
     .more-links a { color: var(--text); text-decoration: none; font-weight: 500; border-bottom: 1px solid var(--rule); padding-bottom: 1px; }
     .more-links a:hover { border-color: var(--accent); color: var(--accent); }
@@ -157,6 +193,11 @@
     @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
     /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .tl::before { left: 4px; transform: none; }
+      .tl-item, .tl-item.tl-right { width: 100%; margin-left: 0; padding: 0 0 1.5rem 1.8rem; }
+      .tl-item::after, .tl-item.tl-right::after { left: 0; right: auto; }
+    }
     @media (max-width: 900px) {
       .nav-links { display: none; }
       .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
@@ -164,9 +205,8 @@
       .section-head { grid-template-columns: 1fr; gap: 0.8rem; }
       .values { grid-template-columns: 1fr; }
       .value, .value + .value { padding: 1.8rem 0; border-left: none; border-bottom: 1px solid var(--rule); }
-      .row, .post { grid-template-columns: 1fr; gap: 0.5rem; }
+      .row { grid-template-columns: 1fr; gap: 0.5rem; }
       .row-logo { justify-self: start; order: -1; margin: 0 0 0.4rem; }
-      .post-arrow { display: none; }
     }
     @media (max-width: 560px) {
       .wrap, .nav-inner { padding-left: 1rem; padding-right: 1rem; }
@@ -220,7 +260,7 @@
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">01 — Values</div>
-      <h2>What drives <em>me</em></h2>
+      <h2>What drives me</h2>
     </div>
     <div class="values">
       <div class="value reveal">
@@ -247,78 +287,92 @@
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">02 — Experience</div>
-      <h2>Places where I made an <em>impact</em></h2>
+      <h2>Places where I made an impact</h2>
     </div>
-    <div class="rows">
+    <div class="tl">
 
-      <div class="row reveal">
-        <div class="row-date">Feb 2026 – Present</div>
-        <div>
-          <div class="row-title">Staff Data Scientist</div>
-          <div class="row-org">Intuit Credit Karma <span>· San Francisco, CA</span></div>
-          <p class="row-desc">Led a cross-functional revenue softness investigation across product, engineering and marketing, recovering $1M+ in revenue. Forecasted a data partnership initiative ($800K impact), designed a long-term holdout to measure incrementality for an engagement surface, and drove &gt;90% AI tool adoption across the analytics org in under a week.</p>
+      <div class="tl-item tl-right reveal">
+        <div class="tl-card">
+          <div class="tl-top">
+            <div class="tl-date">Feb 2026 – Present</div>
+            <img src="ck-logo.svg" alt="Intuit Credit Karma" class="tl-logo" />
+          </div>
+          <div class="tl-title">Staff Data Scientist</div>
+          <div class="tl-org">Intuit Credit Karma</div>
+          <div class="tl-location">San Francisco, CA</div>
         </div>
-        <img src="ck-logo.svg" alt="Intuit Credit Karma" class="row-logo" />
       </div>
 
-      <div class="row reveal">
-        <div class="row-date">Jan 2023 – Jan 2026</div>
-        <div>
-          <div class="row-title">Senior Data Scientist</div>
-          <div class="row-org">Intuit Credit Karma <span>· Los Angeles, CA</span></div>
-          <p class="row-desc">Drove 10%+ activation and 20%+ revenue growth through 50+ A/B tests. Built an AI-powered analytics tool that won an internal hackathon and was adopted by marketing analytics and engineering, driving 2x efficiency. Defined north-star growth metrics and exec dashboards adopted as the team's source of truth.</p>
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <div class="tl-top">
+            <div class="tl-date">Jan 2023 – Jan 2026</div>
+            <img src="ck-logo.svg" alt="Intuit Credit Karma" class="tl-logo" />
+          </div>
+          <div class="tl-title">Senior Data Scientist</div>
+          <div class="tl-org">Intuit Credit Karma</div>
+          <div class="tl-location">Los Angeles, CA</div>
         </div>
-        <img src="ck-logo.svg" alt="Intuit Credit Karma" class="row-logo" />
       </div>
 
-      <div class="row reveal">
-        <div class="row-date">Dec 2021 – Dec 2022</div>
-        <div>
-          <div class="row-title">Data Scientist</div>
-          <div class="row-org">Intuit Credit Karma <span>· Los Angeles, CA</span></div>
-          <p class="row-desc">Lead analyst for the driving score product across partner integrations, funnels and marketing channels. Deep-dives generated 4–5 experiments that drove 2x funnel performance, and partner integration rollout drove a +20% revenue lift for the program.</p>
+      <div class="tl-item tl-right reveal">
+        <div class="tl-card">
+          <div class="tl-top">
+            <div class="tl-date">Dec 2021 – Dec 2022</div>
+            <img src="ck-logo.svg" alt="Intuit Credit Karma" class="tl-logo" />
+          </div>
+          <div class="tl-title">Data Scientist</div>
+          <div class="tl-org">Intuit Credit Karma</div>
+          <div class="tl-location">Los Angeles, CA</div>
         </div>
-        <img src="ck-logo.svg" alt="Intuit Credit Karma" class="row-logo" />
       </div>
 
-      <div class="row reveal">
-        <div class="row-date">June 2020 – Dec 2021</div>
-        <div>
-          <div class="row-title">Data Analyst</div>
-          <div class="row-org">Experian <span>· Costa Mesa, CA</span></div>
-          <p class="row-desc">Built interactive Tableau dashboards on macroeconomic and consumer-behaviour trends. Authored monthly COVID-19 economic impact reports and developed Python automation scripts.</p>
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <div class="tl-top">
+            <div class="tl-date">June 2020 – Dec 2021</div>
+            <img src="experian-logo.png" alt="Experian" class="tl-logo" />
+          </div>
+          <div class="tl-title">Data Analyst</div>
+          <div class="tl-org">Experian</div>
+          <div class="tl-location">Costa Mesa, CA</div>
         </div>
-        <img src="experian-logo.png" alt="Experian" class="row-logo" />
       </div>
 
-      <div class="row reveal">
-        <div class="row-date">Aug 2019 – May 2020</div>
-        <div>
-          <div class="row-title">Associate Instructor</div>
-          <div class="row-org">Indiana University <span>· Bloomington, IN</span></div>
-          <p class="row-desc">Designed and graded assignments for Database Concepts courses, and held weekly office hours supporting students.</p>
+      <div class="tl-item tl-right reveal">
+        <div class="tl-card">
+          <div class="tl-top">
+            <div class="tl-date">Aug 2019 – May 2020</div>
+            <img src="iu-logo.svg" alt="Indiana University" class="tl-logo" />
+          </div>
+          <div class="tl-title">Associate Instructor</div>
+          <div class="tl-org">Indiana University</div>
+          <div class="tl-location">Bloomington, IN</div>
         </div>
-        <img src="iu-logo.svg" alt="Indiana University" class="row-logo" />
       </div>
 
-      <div class="row reveal">
-        <div class="row-date">Oct 2019 – Dec 2019</div>
-        <div>
-          <div class="row-title">Data Science Intern</div>
-          <div class="row-org">The Bee Corp <span>· Bloomington, IN</span></div>
-          <p class="row-desc">Identified predictive features from image and weather data using EDA and feature selection in Python; built a data augmentation pipeline on Amazon S3.</p>
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <div class="tl-top">
+            <div class="tl-date">Oct 2019 – Dec 2019</div>
+            <img src="beecorp-logo.webp" alt="The Bee Corp" class="tl-logo" />
+          </div>
+          <div class="tl-title">Data Science Intern</div>
+          <div class="tl-org">The Bee Corp</div>
+          <div class="tl-location">Bloomington, IN</div>
         </div>
-        <img src="beecorp-logo.webp" alt="The Bee Corp" class="row-logo" />
       </div>
 
-      <div class="row reveal">
-        <div class="row-date">May 2019 – Aug 2019</div>
-        <div>
-          <div class="row-title">Data Science Intern</div>
-          <div class="row-org">Askwhai <span>· Chicago, IL</span></div>
-          <p class="row-desc">Built an unsupervised NLP product recommendation system and an interactive Shiny app for user-behaviour insights; automated the data refresh pipeline using Python, Bash and PostgreSQL.</p>
+      <div class="tl-item tl-right reveal">
+        <div class="tl-card">
+          <div class="tl-top">
+            <div class="tl-date">May 2019 – Aug 2019</div>
+            <img src="askwhai-logo.png" alt="Askwhai" class="tl-logo" />
+          </div>
+          <div class="tl-title">Data Science Intern</div>
+          <div class="tl-org">Askwhai</div>
+          <div class="tl-location">Chicago, IL</div>
         </div>
-        <img src="askwhai-logo.png" alt="Askwhai" class="row-logo" />
       </div>
 
     </div>
@@ -331,7 +385,7 @@
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">03 — Education</div>
-      <h2>My educational <em>background</em></h2>
+      <h2>My educational background</h2>
     </div>
     <div class="rows">
 
@@ -362,7 +416,7 @@
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">04 — Writing</div>
-      <h2>My <em>perspectives</em></h2>
+      <h2>My perspectives</h2>
     </div>
 
     <div class="filters">
@@ -376,102 +430,91 @@
     <div class="posts">
 
       <a class="post reveal" href="https://devanshim.substack.com/p/thinking-metrics-for-instinct" target="_blank" data-cat="data">
-        <div class="post-date">Nov 18, 2026</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">Thinking metrics for Instinct</div>
           <div class="post-excerpt">Thinking through how I would measure the success of AI products.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>Nov 18, 2026</span><span class="read-more">Read →</span></div>
       </a>
 
       <a class="post reveal" href="https://devanshim.substack.com/p/self-doubt-a-demon-living-in-each" target="_blank" data-cat="life">
-        <div class="post-date">Sep 23, 2026</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">Self-doubt: A demon living in each of us</div>
           <div class="post-excerpt">I had a lot of self-doubt, and I still have spikes of it.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>Sep 23, 2026</span><span class="read-more">Read →</span></div>
       </a>
 
       <a class="post reveal" href="https://devanshim.substack.com/p/goodreads-an-app-for-book-lovers" target="_blank" data-cat="culture">
-        <div class="post-date">Jan 3, 2026</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">Goodreads: An app for book lovers, but is it the best?</div>
           <div class="post-excerpt">A deep dive into one of the most popular reading-tracking platforms — what it gets right, where it falls short.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>Jan 3, 2026</span><span class="read-more">Read →</span></div>
       </a>
 
       <a class="post reveal" href="https://mittal-devanshi1996.medium.com/my-la-la-land-441a684f9b5d" target="_blank" data-cat="life">
-        <div class="post-date">Nov 28, 2025</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">My LA LA Land</div>
           <div class="post-excerpt">A personal reflection on life in Los Angeles — the energy, the chaos, the sunshine, and the lessons learned from living in one of the world's most cinematic cities.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>Nov 28, 2025</span><span class="read-more">Read →</span></div>
       </a>
 
       <a class="post reveal" href="https://mittal-devanshi1996.medium.com/as-a-female-i-absolutely-adore-these-women-led-tv-shows-because-i-can-relate-and-you-too-will-944be8be3fe6" target="_blank" data-cat="culture">
-        <div class="post-date">Jun 25, 2021</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">Women-led TV shows I absolutely adore — and you will too</div>
           <div class="post-excerpt">A curated watchlist of shows with strong female leads that are relatable, powerful, and refreshingly real. Because representation matters and great storytelling is timeless.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>Jun 25, 2021</span><span class="read-more">Read →</span></div>
       </a>
 
       <a class="post reveal" href="https://mittal-devanshi1996.medium.com/5-things-my-data-science-journey-taught-me-but-everyone-could-imbibe-47baa01817a2" target="_blank" data-cat="data">
-        <div class="post-date">Jun 17, 2021</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">5 Things my Data Science Journey taught me — but everyone could imbibe</div>
           <div class="post-excerpt">Five hard-earned lessons from breaking into data science that apply far beyond any technical field.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>Jun 17, 2021</span><span class="read-more">Read →</span></div>
       </a>
 
       <a class="post reveal" href="https://mittal-devanshi1996.medium.com/my-first-experience-living-in-my-first-solo-apartment-cdbdc918f6d2" target="_blank" data-cat="life">
-        <div class="post-date">Jun 10, 2021</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">My first experience living in my first solo apartment</div>
           <div class="post-excerpt">Moving into your first place alone is terrifying and exhilarating — an honest account of everything I felt, fumbled, and figured out.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>Jun 10, 2021</span><span class="read-more">Read →</span></div>
       </a>
 
       <a class="post reveal" href="https://mittal-devanshi1996.medium.com/habit-forming-products-443acef4673c" target="_blank" data-cat="data">
-        <div class="post-date">Oct 20, 2019</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">Habit-forming products</div>
           <div class="post-excerpt">The psychology behind why some products become indispensable daily rituals — and what builders can learn from the Hook Model and behavioral design.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>Oct 20, 2019</span><span class="read-more">Read →</span></div>
       </a>
 
       <a class="post reveal" href="https://mittal-devanshi1996.medium.com/the-kuari-pass-trek-where-my-worst-fears-turned-into-my-biggest-learning-617f7c2a79b9" target="_blank" data-cat="life">
-        <div class="post-date">May 10, 2017</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">The Kuari Pass Trek: Where My Worst Fears Turned Into My Biggest Learning</div>
           <div class="post-excerpt">Trekking through the Himalayas — cold nights, altitude sickness, and moments of doubt that ultimately gave way to clarity and confidence.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>May 10, 2017</span><span class="read-more">Read →</span></div>
       </a>
 
       <a class="post reveal" href="https://yourstory.com/mystory/588abefe85-ever-wondered-that-you-could-do-something-other-than-joining-college-after-school-" target="_blank" data-cat="yourstory">
-        <div class="post-date">YourStory</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">Ever wondered that you could do something other than joining college after school?</div>
           <div class="post-excerpt">An exploration of the alternative paths available after school — challenging the conventional notion that college is the only route to success.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>YourStory</span><span class="read-more">Read →</span></div>
       </a>
 
       <a class="post reveal" href="https://yourstory.com/mystory/20a136bb0d-this-husband-is-ready-to-work-behind-the-scenes-while-the-wife-runs-the-show-" target="_blank" data-cat="yourstory">
-        <div class="post-date">YourStory</div>
-        <div>
+        <div class="post-body">
           <div class="post-title">This husband is ready to work behind the scenes while the wife runs the show!</div>
           <div class="post-excerpt">The story of a husband who chose to support his wife's entrepreneurial ambitions — stepping back to help her build something extraordinary.</div>
         </div>
-        <div class="post-arrow">→</div>
+        <div class="post-footer"><span>YourStory</span><span class="read-more">Read →</span></div>
       </a>
 
     </div>
